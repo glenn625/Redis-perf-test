@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subapp
+  labels:
+    app: subapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subapp
+  template:
+    metadata:
+      labels:
+        app: subapp
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "subapp"
+        dapr.io/app-port: "6001"
+    spec:
+      containers:
+      - name: subapp
+        image: tmajorglennaks.azurecr.io/subapp:latest
+        ports:
+        - containerPort: 6001
+        #imagePullPolicy: Always

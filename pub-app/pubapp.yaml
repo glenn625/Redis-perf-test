@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pubapp
+  labels:
+    app: pubapp
+spec:
+  selector:
+    app: pubapp
+  ports:
+  - protocol: TCP
+    port: 80
+    #targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pubapp
+  labels:
+    app: pubapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubapp
+  template:
+    metadata:
+      labels:
+        app: pubapp
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "pubapp"
+        #dapr.io/app-port: "8080"
+    spec:
+      containers:
+      - name: pubapp
+        image: tmajorglennaks.azurecr.io/pubapp:latest
+        #ports:
+        #- containerPort: 8080
+        #imagePullPolicy: Always
